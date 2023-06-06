@@ -1,10 +1,10 @@
 xterm.termName: xterm-256color
 
-XTerm.vt100.faceName: Fira Mono:size=10.5
-XTerm.vt100.font: 6x10
-XTerm*metaSendsEscape: true
-XTerm.vt100.backarrowKey: false
-XTerm.ttyModes: erase ^?
+*faceName: Fira Mono
+*faceSize: 16
+xterm*metaSendsEscape: true
+xterm.vt100.backarrowKey: false
+xterm.ttyModes: erase ^?
 
 !baskerville - ivory dark
 *background:  #282C28
