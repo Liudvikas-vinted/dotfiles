@@ -10,7 +10,6 @@ xterm.ttyModes: erase ^?
 *background:  #282C28
 *foreground:  #DADCE3
 
-
 ! BLACK
 *color0:      #595955
 *color8:      #707277
