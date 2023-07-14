@@ -25,11 +25,14 @@
 (setq company-dabbrev-downcase nil)
 (setq ess-default-style 'RStudio)
 ;; these next two lines are supposed to do the same thing
-(setq ess-smart-S-assign-key (kbd ";"))
 (define-key ess-mode-map ";" 'ess-insert-assign)
+(define-key inferior-ess-mode-map ";" 'ess-insert-assign)
 (define-key ess-mode-map "_" nil)
 (define-key inferior-ess-mode-map "_" nil)
-(define-key inferior-ess-mode-map ";" 'ess-insert-assign)
+(define-key ess-mode-map "\\" 'ess-insert-pipe)
+(define-key inferior-ess-mode-map "\\" 'ess-insert-pipe)
+
+
 (setq ess-eval-visibly 'nowait) 
 (setq ess-tab-complete-in-script t)
 
@@ -56,3 +59,28 @@
     :hostmode 'poly-R-hostmode
     :innermodes '(poly-sql-expr-R-innermode)
     (setq polymode-eval-region-function #'poly-R-sql-eval-chunk)))
+
+
+(setq ess-pipe-list '(" %>% "))
+
+(defun ess-insert-pipe (arg)
+  "Insert the first element of `ess-pipe-list' unless in string or comment.
+If the character before point is the first element of
+`ess-pipe-list', replace it with the last character typed.
+
+If `ess-language' is not \"S\", call `self-insert-command' with ARG."
+  (interactive "p")
+  (if (string= ess-language "S")
+      (let* ((pipe (car ess-pipe-list))
+             (event (event-basic-type last-input-event))
+             (char (ignore-errors (format "%c" event))))
+        (cond ((and char (ess-inside-string-or-comment-p))
+               (insert char))
+              ((re-search-backward pipe (- (point) (length pipe)) t)
+               (if (and char (numberp event))
+                   (replace-match char t t)
+                 (replace-match "")))
+              (t (delete-horizontal-space) 
+                 (insert pipe))))
+    (funcall #'self-insert-command arg)))
+
